@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Message For You ✨</title>
+    <style>
+        /* Premium Animated Background Gradient */
+        body {
+            background: linear-gradient(-45deg, #ff758c, #ff7eb3, #ffeef2, #ffccd5);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Card Container Wrapper */
+        .card-wrapper {
+            width: 100%;
+            max-width: 420px;
+            perspective: 1000px;
+        }
+
+        .compliment-card {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 40px 25px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(214, 51, 132, 0.15);
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .main-icon {
+            font-size: 75px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(4deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2.2em;
+            margin: 10px 0;
+        }
+
+        /* Fixed Gradient Text Properties (No VS Code Warnings) */
+        .name-highlight {
+            background: linear-gradient(120deg, #ff758c 0%, #ff7eb3 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        p {
+            color: #5a626a;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Custom Interactive Button */
+        .action-btn {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.6);
+        }
+
+        /* Hidden States Setup */
+        .hidden-section {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeInFrame 0.6s ease forwards;
+        }
+
+        @keyframes fadeInFrame {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="card-wrapper">
+        <div class="compliment-card">
+            
+            <div id="stage-1">
+                <div class="main-icon">✉️</div>
+                <h1>A Important Note</h1>
+                <p>Tap the button below to open it up!</p>
+                <button class="action-btn" onclick="revealMessage('Nehahha')">Open Note ✨</button>
+            </div>
+
+            <div id="stage-2" class="hidden-section">
+                <div class="main-icon">🥰</div>
+                <h1>Hey, <span class="name-highlight" id="namePlaceholder">Name</span>!</h1>
+                <p style="font-size: 1.3em; color: #d63384; font-weight: 600;">Just wanted to tell you that you are very cute! 💖</p>
+                <p>Hope your results turn out as beautiful as you are, you diva!</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function revealMessage(recipientName) {
+            document.getElementById('namePlaceholder').innerText = recipientName;
+            
+            document.getElementById('stage-1').style.display = 'none';
+            
+            const stage2 = document.getElementById('stage-2');
+            stage2.style.display = 'block';
+            stage2.classList.add('fade-in');
+            
+            triggerConfettiExplosion();
+        }
+
+        /* High-Performance Canvas Confetti Particle Renderer */
+        function triggerConfettiExplosion() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let pieces = [];
+            const numberOfPieces = 120;
+            const colors = ['#ff758c', '#ff7eb3', '#d63384', '#00abc4', '#ffeb3b'];
+
+            for (let i = 0; i < numberOfPieces; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    rotation: Math.random() * 360,
+                    size: Math.random() * 6 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 4 + 3,
+                    rotationSpeed: Math.random() * 4 - 2
+                });
+            }
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(function(p) {
+                    p.y += p.speed;
+                    p.rotation += p.rotationSpeed;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                });
+
+                pieces = pieces.filter(p => p.y < canvas.height);
+                if (pieces.length > 0) {
+                    requestAnimationFrame(update);
+                }
+            }
+            update();
+        }
+    </script>
+
+</body>
+</html>
